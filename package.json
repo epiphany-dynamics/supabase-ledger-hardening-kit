@@ -1,0 +1,33 @@
+{
+  "name": "supabase-ledger-hardening-kit",
+  "version": "1.0.0",
+  "description": "Reference toolkit for hardening Supabase/Postgres apps against ledger race conditions, RLS misconfigurations, and untested concurrent load.",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "ledger:demo": "node ledger/test/concurrency-demo.mjs",
+    "ledger:server": "node ledger/server.mjs",
+    "rls:audit": "node rls-test-harness/audit.mjs",
+    "load:test": "k6 run load-test/ledger-race.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "pg": "^8.13.1"
+  },
+  "keywords": [
+    "supabase",
+    "postgres",
+    "row-level-security",
+    "rls",
+    "concurrency",
+    "race-condition",
+    "ledger",
+    "security",
+    "load-testing",
+    "k6"
+  ]
+}

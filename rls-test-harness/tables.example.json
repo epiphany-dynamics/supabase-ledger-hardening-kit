@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "expectAnonReadable": false,
+    "ownerColumn": "user_id",
+    "knownOtherUserRowId": "REPLACE-WITH-A-REAL-ROW-ID-OWNED-BY-A-DIFFERENT-USER",
+    "writeProbeRow": {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000000"
+    },
+    "writeProbeField": "display_name",
+    "writeProbeValue": "rls-audit-probe-value"
+  },
+  "public_products": {
+    "expectAnonReadable": true
+  },
+  "orders": {
+    "expectAnonReadable": false,
+    "ownerColumn": "customer_id",
+    "knownOtherUserRowId": "REPLACE-WITH-A-REAL-ORDER-ID-OWNED-BY-A-DIFFERENT-USER",
+    "writeProbeRow": {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "customer_id": "00000000-0000-0000-0000-000000000000",
+      "total_cents": 0
+    },
+    "writeProbeField": "notes",
+    "writeProbeValue": "rls-audit-probe-value"
+  }
+}
