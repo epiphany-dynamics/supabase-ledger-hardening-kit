@@ -9,6 +9,8 @@ production systems: subscription platforms, in-app credit systems, and
 marketplace balance ledgers all fail in the same three ways. This kit shows
 each failure class, the fix, and a way to prove the fix actually works.
 
+Generalized from a client engagement. Case study: https://patrickgibbs.dev/work/case/bbq-registry/
+
 ## The three failure classes
 
 Almost every "balance went negative" or "user saw someone else's data"
@@ -131,6 +133,22 @@ npm run rls:audit
 # 3. Load-test the ledger endpoint
 npm run load:test
 ```
+
+## Tests
+
+There is no automated test suite and no `npm test` script. The proof lives in two runnable pieces, both of which need a reachable Postgres database:
+
+- `npm run ledger:demo` (`ledger/test/concurrency-demo.mjs`) fires concurrent deductions at the naive and hardened functions and prints the resulting balances. The naive run double-spends, the hardened run does not. This is the test that matters.
+- `npm run load:test` (k6, see `load-test/`) sends a burst of concurrent requests and asserts the final balance is arithmetically exact.
+- `ledger/test/pgtap_invariant.sql` holds optional pgTAP checks for the single-request contract. These do not prove concurrency safety on their own.
+
+Neither of the first two ran while this README was written, because no Postgres was reachable in that environment. The `rls-test-harness/` probes need a live Supabase project and were not run either.
+
+## Known limits
+
+- The RLS probe logic is checked against documented PostgREST and Supabase semantics by review, but has not been smoke-tested end to end against a live project. Run it once against staging and confirm the findings before wiring it into a gate.
+- Point `DATABASE_URL` at a scratch database. The demo creates its own `accounts` and `ledger_entries` tables.
+- The hardened pattern takes a row lock with `SELECT ... FOR UPDATE`, which serializes writes against the same account. That is the point, but it means a single hot account is a throughput ceiling. `SERIALIZABLE` is the alternative when an invariant spans more than one row.
 
 ## License
 
